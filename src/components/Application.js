@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import DayList from "components/DayList"
 
-
 import "components/Application.scss";
 
 export default function Application(props) {
