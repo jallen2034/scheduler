@@ -118,14 +118,14 @@ storiesOf("InterviewerList", module)
   .add("Initial", () => (
     <InterviewerList
       interviewers={interviewers}
-      setInterviewer={action("setInterviewer")}
+      onChange={action("onChange")}
     />
   ))
   .add("Preselected", () => (
     <InterviewerList
       interviewers={interviewers}
       value={3}
-      onChange={action("setInterviewer")}
+      onChange={action("onChange")}
     />
   ));
 
@@ -136,6 +136,7 @@ import Show from "components/Appointment/Show";
 import Confirm from "components/Appointment/Confirm";
 import Status from "components/Appointment/Status";
 import Error from "components/Appointment/Error";
+import Form from "components/Appointment/Form"
 
 storiesOf("Appointment", module)
   .addParameters({
@@ -181,4 +182,19 @@ storiesOf("Appointment", module)
       onClose={action("confirmClose")}
     />
   ))
-
+  .add("EditStory", () => (
+    <Form 
+      name="Jacob"
+      interviewers={interviewers}
+      interviewer={3}
+      onSave={action("onSave")}
+      onCancel={action("onCancel")}
+    />
+  ))
+  .add("CreateStory", () => (
+    <Form 
+      interviewers={interviewers}
+      onSave={action("onSave")}
+      onCancel={action("onCancel")}
+    />
+  ))
