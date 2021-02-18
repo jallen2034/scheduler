@@ -6,7 +6,6 @@ import Show from "components/Appointment/Show";
 
 export default function Appointment(props) {
   return (
-    <Fragment>
       <article className="appointment">
         <Header time={props.time}/>
         {props.interview ?
@@ -20,20 +19,5 @@ export default function Appointment(props) {
           onAdd={props.onAdd} 
         />}
       </article>
-    </Fragment>
   )
 }
-
-/*
-return (
-  <article className="appointment">
-    <Header time={props.time} />
-    {props.interview ?
-      <Show
-        student={props.interview.student}
-        interviewer={props.interview.interviewer} /> :
-      <Empty />}
-  </article>
-);
-
-*/

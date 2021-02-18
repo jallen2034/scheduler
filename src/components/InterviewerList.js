@@ -8,6 +8,7 @@ export default function InterviewerList(props) {
   const renderedInterviewerList = props.interviewers.map(indivualInterviewer => {
     return (
       <InterviewerListItem
+      key={indivualInterviewer.id}
       id={indivualInterviewer.id}
       name={indivualInterviewer.name}
       avatar={indivualInterviewer.avatar}
@@ -24,3 +25,4 @@ export default function InterviewerList(props) {
     </section>
   )
 };
+
