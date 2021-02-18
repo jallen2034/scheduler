@@ -3,6 +3,7 @@ import axios from 'axios';
 import DayList from "components/DayList"
 import "components/Application.scss";
 import Appointment from "components/Appointment";
+import getAppointmentsForDay from "helpers/selectors";
 
 const appointments = [
   {
@@ -69,6 +70,7 @@ export default function Application(props) {
     });
   }, []);
 
+  // chile component that will loop through the array of apointments and mapa new array of apointments with JSX in each index for each one
   const mappedApointments = appointments.map(appointment => {
     return (
       <Appointment
