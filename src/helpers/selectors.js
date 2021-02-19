@@ -10,7 +10,7 @@ export function getAppointmentsForDay(state, dayName) {
 
   // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find
   const foundDay = state.days.find(day => day.name === dayName);
-  
+
   // returns an empty array when the day is not found :(
   if (!foundDay) {
     return [];
