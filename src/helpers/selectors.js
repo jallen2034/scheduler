@@ -17,5 +17,19 @@ export function getAppointmentsForDay(state, dayName) {
   }
 
   // 2. happy path - loop through days apointment array find the associated apointments for that day and return as an array :)
-  return foundDay.appointments.map(appointmentId => state.appointments[appointmentId]);
+  return foundDay.appointments.map(appointment => state.appointments[appointment]);
 };
+
+// helper functin that will transform the 
+// interview second paramater takes in interview object that looks like this: interview: { student: "Chad Takahashi", interviewer: 2 }
+export function getInterview(state, interview) {
+
+  if (!interview) {
+    return null;
+  }
+
+  const interviewerID = interview.interviewer;
+  const foundInterviewer = state.interviewers[interviewerID];
+  const interviewInfo = {...interview, interviewer: foundInterviewer};
+  return interviewInfo;
+}

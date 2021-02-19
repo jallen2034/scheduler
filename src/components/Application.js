@@ -3,7 +3,7 @@ import axios from 'axios';
 import DayList from "components/DayList"
 import "components/Application.scss";
 import Appointment from "components/Appointment";
-import { getAppointmentsForDay } from "helpers/selectors";
+import { getAppointmentsForDay, getInterview } from "helpers/selectors";
 
 export default function Application(props) {
 
@@ -11,10 +11,11 @@ export default function Application(props) {
   const [state, setState] = useState({
     day: "Monday",
     days: [],
-    appointments: {}
+    appointments: {},
+    interviewers: {}
   });
 
-  // Add the line below:
+  // call getAppointmentsForDay function to tranform the apointments object we stored in state from our API call into something react can render
   const dailyAppointments = getAppointmentsForDay(state, state.day);
 
   // function that will allow us to update the state JUST for the indiivdual day in our object of states
@@ -30,31 +31,43 @@ export default function Application(props) {
   useEffect(() => {
     const daysUrl = `/api/days`;
     const appointmentsUrl = `/api/appointments`;
+    const interviewersUrl = `/api/interviewers`;
     Promise.all([
       axios.get(daysUrl),
       axios.get(appointmentsUrl),
+      axios.get(interviewersUrl)
     ])
     .then((all) => {
-      setState({...state, days: all[0].data, appointments: all[1].data});
+      console.log("Interviewers Object from endpoint: ", all[2].data);
+      setState({
+        ...state, 
+        days: all[0].data, 
+        appointments: all[1].data,
+        interviewers: all[2].data
+      });
     })
     .catch(err => {
       console.log(err)
     });
   }, []);
 
-  // chile component that will loop through the array of apointments and mapa new array of apointments with JSX in each index for each one
+
+  // child component that will loop through the array of apointments and mapa new array of apointments with JSX in each index for each one
   const mappedApointments = dailyAppointments.map(appointment => {
+    // call setInterview here
+    const interview = getInterview(state, appointment.interview);
+
     return (
       <Appointment
         key={appointment.id}
         {...appointment}
+        id={appointment.id}
+        time={appointment.time}
+        interview={interview}
       />
     )
   });
 
-  // old way to store state
-  // The Application component should set the default day state to "Monday"
-  // const [currentDay, setCurrentDay] = useState("Monday");
   return (
     <main className="layout">
       <section className="sidebar">
@@ -79,7 +92,10 @@ export default function Application(props) {
       </section>
       <section className="schedule">
         {mappedApointments}
-        <Appointment key="last" time="5pm" />
+        <Appointment 
+          key="last" 
+          time="5pm" 
+        />
       </section>
     </main>
   );
