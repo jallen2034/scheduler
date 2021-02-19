@@ -55,7 +55,17 @@ const appointments = [
 export default function Application(props) {
 
   // use state to store our collected days from our AXIOS api call in this component to be retained on refresh
-  const [days, setDays] = useState([]);
+  const [state, setState] = useState({
+    day: "Monday",
+    days: [],
+    // you may put the line below, but will have to remove/comment hardcoded appointments variable
+    appointments: {}
+  });
+
+  // function that will allow us to update the state JUST for the indiivdual day in our object of states
+  const setDay = function (newDay) {
+    setState({...state, day: newDay});
+  }
 
   // useEffect which only runs when the page loads ONCE to make API call to get our days for react to render to our page
   useEffect(() => {
@@ -63,7 +73,7 @@ export default function Application(props) {
     axios.get(url)
     .then(response => {
       console.log(response);
-      setDays([...response.data]);
+      setState({...state, days: response.data});
     })
     .catch(err => {
       console.log(err)
@@ -80,9 +90,9 @@ export default function Application(props) {
     )
   });
 
-  // const [count, setCount] = useState(0);
+  // old way to store state
   // The Application component should set the default day state to "Monday"
-  const [currentDay, setCurrentDay] = useState("Monday");
+  // const [currentDay, setCurrentDay] = useState("Monday");
 
   return (
     <main className="layout">
@@ -95,9 +105,9 @@ export default function Application(props) {
         <hr className="sidebar__separator sidebar--centered" />
         <nav className="sidebar__menu">
         <DayList
-          days={days}
-          day={currentDay}
-          setDay={setCurrentDay}
+          days={state.days}
+          day={state.day}
+          setDay={setDay}
         />
         </nav>
         <img
