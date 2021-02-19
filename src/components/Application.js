@@ -51,7 +51,6 @@ export default function Application(props) {
     });
   }, []);
 
-
   // child component that will loop through the array of apointments and mapa new array of apointments with JSX in each index for each one
   const mappedApointments = dailyAppointments.map(appointment => {
     // call setInterview here
