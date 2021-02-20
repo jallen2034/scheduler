@@ -52,7 +52,7 @@ test("useVisualMode should not return to previous mode if already at initial", (
 });
 
 // Replace
-test.only("useVisualMode should replace the current mode", () => {
+test("useVisualMode should replace the current mode", () => {
   const { result } = renderHook(() => useVisualMode(FIRST));
 
   act(() => result.current.transition(SECOND));

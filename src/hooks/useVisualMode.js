@@ -8,7 +8,7 @@ const useVisualMode = function (inital) {
 
   // transition function would be declared in here
   // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Default_parameters
-  const transitionMode = function (newMode, replace = false) {
+  const transition = function (newMode, replace = false) {
 
     // check if replace as an incoming parmater is true
     if (replace) {
@@ -17,14 +17,13 @@ const useVisualMode = function (inital) {
       replacedMode.push(newMode);
       setMode(replacedMode);
     } else {
-      setMode([...mode, newMode])
+      setMode([...mode, newMode]);
     }
   }
 
   const back = function () {
     const poppedArr = [...mode];
-    console.log("poppedArr", poppedArr);
-  
+ 
     // implement back limit
     if (poppedArr.length > 1){
       poppedArr.pop();
@@ -35,7 +34,9 @@ const useVisualMode = function (inital) {
     return;
   }
 
-  return { mode: mode.slice(-1)[0], transition: transitionMode, back };
+  // mode.slice(-1)[0] gets last index of mode array and it is later returned out of this function
+  const currentMode = mode.slice(-1)[0];
+  return { mode: currentMode, transition, back };
 }
 
 export default useVisualMode;
