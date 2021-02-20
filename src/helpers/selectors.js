@@ -33,3 +33,25 @@ export function getInterview(state, interview) {
   const interviewInfo = {...interview, interviewer: foundInterviewer};
   return interviewInfo;
 }
+
+
+export function getInterviewersForDay(state, dayName) {
+
+  if (state.days.length === 0 || state.days === undefined) {
+    return [];
+  }
+
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find
+  const foundDay = state.days.find(day => day.name === dayName);
+
+  console.log("My foundDay!: ", foundDay)
+
+  // returns an empty array when the day is not found :(
+  if (!foundDay) {
+    return [];
+  }
+
+  // grab interviewers array from the found day
+  const foundDayInterviewers = foundDay.interviewers.map(interviewer => state.interviewers[interviewer]);
+  return foundDayInterviewers;
+};
