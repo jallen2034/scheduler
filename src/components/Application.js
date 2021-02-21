@@ -18,6 +18,30 @@ export default function Application(props) {
   // call getAppointmentsForDay function to tranform the apointments object we stored in state from our API call into something react can render
   const dailyAppointments = getAppointmentsForDay(state, state.day);
 
+  /* Create a function called bookInterview inside the Application component. Copy and paste the template below. 
+   * Then pass bookInterview to each Appointment component as props. */
+  function bookInterview(id, interview) {
+
+    // populating the correct appointment on the incoming id with the new incoming interview 
+    const newAppointment = {
+      ...state.appointments[id],
+      interview: { ...interview }
+    };
+
+    // update the state on the front-end to reflect the new apointment being booked
+    const apointmentsCopy = {...state.appointments}
+    apointmentsCopy[id] = newAppointment;
+    
+    // perform axios POST to back-end call to server to send the new booked appointment to our server with the changes
+    const appointmentsUpdateUrl = `/api/appointments/${id}`;
+    return axios.put(appointmentsUpdateUrl, apointmentsCopy[id])
+    .then((response) => {
+      if (response.status === 204) {
+        setState({...state, appointments: apointmentsCopy});
+      }
+    });
+  }
+
   // function that will allow us to update the state JUST for the indiivdual day in our object of states
   const setDay = function (newDay) {
     setState({...state, day: newDay});
@@ -51,12 +75,12 @@ export default function Application(props) {
     });
   }, []);
 
-  // child component that will loop through the array of apointments and mapa new array of apointments with JSX in each index for each one
+  /* child component that will loop through the array of apointments and mapa new array of apointments with JSX in each index for each one
+   * call setInterview & interviewers here */
   const mappedApointments = dailyAppointments.map(appointment => {
-    // call setInterview here
     const interview = getInterview(state, appointment.interview);
-    const interviewers = getInterviewersForDay(state, state.day)
-
+    const interviewers = getInterviewersForDay(state, state.day);
+    // console.log("appointment object: ", appointment);
     return (
       <Appointment
         key={appointment.id}
@@ -65,6 +89,7 @@ export default function Application(props) {
         time={appointment.time}
         interview={interview}
         interviewers={interviewers}
+        bookInterview={bookInterview}
       />
     )
   });
