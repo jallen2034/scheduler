@@ -16,6 +16,7 @@ const CREATE = "CREATE";
 const SAVE = "SAVE";
 const DELETE = "DELETE";
 const CONFIRM = "CONFIRM";
+const EDIT = "EDIT";
 
 export default function Appointment(props) {
   const { mode, transition, back } = useVisualMode(props.interview ? SHOW : EMPTY);
@@ -44,7 +45,7 @@ export default function Appointment(props) {
     });
   }
 
-  // Add the rest of the local and remote delete behaviour to the Appointment component
+  // add the rest of the local and remote delete behaviour to the Appointment component
   function cancelInterview() {
     transition(DELETE);
     props.deleteInterview(props.id)
@@ -60,7 +61,7 @@ export default function Appointment(props) {
         <Show
           students={props.interview.student}
           interviewer={props.interview.interviewer}
-          onEdit={props.onEdit}
+          onEdit={() => transition(EDIT)}
           onDelete={() => transition(CONFIRM)}
         />
       )
@@ -98,6 +99,17 @@ export default function Appointment(props) {
           onCancel={back}
           onConfirm={cancelInterview}
         />
+      )
+      }
+      { mode === EDIT && (
+         <Form
+         interviewers={[]}
+         interviewers={props.interviewers}
+         onSave={save}
+         onCancel={back}
+         name={props.interview.student}
+         interviewer={props.interview.interviewer.id}
+       />
       )
       }
     </article>
