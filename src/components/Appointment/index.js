@@ -35,32 +35,31 @@ export default function Appointment(props) {
       student: name,
       interviewer
     };
-    
+
     if (!interviewer || name.length === 0) {
-      console.log("Something wrong no interviewer selected")
-      return;
+      return console.log("Something wrong no interviewer selected or no name inputted");
     }
 
     transition(SAVE);
     props.bookInterview(props.id, interview)
-    .then(() => {
-      transition(SHOW);
-    })
-    .catch((error) => {
-      transition(ERRORSAVE, true);
-    });
+      .then(() => {
+        transition(SHOW);
+      })
+      .catch((error) => {
+        transition(ERRORSAVE, true);
+      });
   }
 
   // add the rest of the local and remote delete behaviour to the Appointment component
   function cancelInterview() {
     transition(DELETE);
     props.deleteInterview(props.id)
-    .then(() => {
-      transition(EMPTY);
-    })
-    .catch((error) => {
-      transition(ERRORDEL, true)
-    });
+      .then(() => {
+        transition(EMPTY);
+      })
+      .catch((error) => {
+        transition(ERRORDEL, true)
+      });
   }
 
   return (
@@ -111,26 +110,26 @@ export default function Appointment(props) {
       )
       }
       { mode === EDIT && (
-         <Form
-         interviewers={[]}
-         interviewers={props.interviewers}
-         onSave={save}
-         onCancel={back}
-         name={props.interview.student}
-         interviewer={props.interview.interviewer.id}
-       />
+        <Form
+          interviewers={[]}
+          interviewers={props.interviewers}
+          onSave={save}
+          onCancel={back}
+          name={props.interview.student}
+          interviewer={props.interview.interviewer.id}
+        />
       )
       }
       { mode === ERRORSAVE && (
         <Error
-          message="Would you like to delete this?"
+          message="Error saving appointment"
           onClose={back}
         />
       )
       }
-        { mode === ERRORDEL && (
+      { mode === ERRORDEL && (
         <Error
-          message="Would you like to delete this?"
+          message="Error deleting appointment"
           onClose={back}
         />
       )

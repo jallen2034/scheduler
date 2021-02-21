@@ -6,11 +6,13 @@ import { useState } from "react";
 const useVisualMode = function (inital) {
   const [mode, setMode] = useState([inital]);
 
-  // transition function would be declared in here
-  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Default_parameters
+  /* transition function would be declared in here
+   * check if replace as an incoming parmater is true
+   * implement back limit
+   * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/pop
+   * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Default_parameters */
   const transition = function (newMode, replace = false) {
 
-    // check if replace as an incoming parmater is true
     if (replace) {
       const replacedMode = [...mode]
       replacedMode.pop();
@@ -24,7 +26,6 @@ const useVisualMode = function (inital) {
   const back = function () {
     const poppedArr = [...mode];
  
-    // implement back limit
     if (poppedArr.length > 1){
       poppedArr.pop();
       setMode(poppedArr);
