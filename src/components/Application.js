@@ -20,7 +20,7 @@ export default function Application(props) {
 
   /* Create a function called bookInterview inside the Application component. Copy and paste the template below. 
    * Then pass bookInterview to each Appointment component as props. */
-  function bookInterview(id, interview) {
+  const bookInterview = function (id, interview) {
 
     // populating the correct appointment on the incoming id with the new incoming interview 
     const newAppointment = {
@@ -38,6 +38,22 @@ export default function Application(props) {
     .then((response) => {
       if (response.status === 204) {
         setState({...state, appointments: apointmentsCopy});
+      }
+    });
+  }
+
+  // function that will be able to delete interviews when called
+  const deleteInterview = function (id) {
+    const appointmentsDelUrl = `/api/appointments/${id}`;
+    const apointmentToNullify = {...state.appointments[id], interview: null};
+    const nullifiedApointmentState = {...state.appointments, [id]: apointmentToNullify};
+    console.log("nullifiedApointmentState: ", nullifiedApointmentState);
+    console.log("apointmentToNullify: ", apointmentToNullify);
+
+    return axios.delete(appointmentsDelUrl)
+    .then((response) => {
+      if (response.status === 204) {
+        setState({...state, appointments: nullifiedApointmentState});
       }
     });
   }
@@ -90,6 +106,7 @@ export default function Application(props) {
         interview={interview}
         interviewers={interviewers}
         bookInterview={bookInterview}
+        deleteInterview={deleteInterview}
       />
     )
   });
