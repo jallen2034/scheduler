@@ -55,7 +55,7 @@ export default function Application(props) {
       if (response.status === 204) {
         setState({...state, appointments: nullifiedApointmentState});
       }
-    });
+    })
   }
 
   // function that will allow us to update the state JUST for the indiivdual day in our object of states

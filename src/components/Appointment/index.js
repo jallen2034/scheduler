@@ -7,6 +7,7 @@ import useVisualMode from "../../hooks/useVisualMode";
 import Form from "./Form";
 import Status from "./Status";
 import Confirm from "./Confirm";
+import Error from "./Error";
 
 // add the mode constants to the src/components/Appointment/index.js file.
 // terinary in function call asks if props.interview prop is truthy, if so pass in show, otherwise pass empty
@@ -17,6 +18,8 @@ const SAVE = "SAVE";
 const DELETE = "DELETE";
 const CONFIRM = "CONFIRM";
 const EDIT = "EDIT";
+const ERRORSAVE = "ERRORSAVE";
+const ERRORDEL = "ERRORDEL";
 
 export default function Appointment(props) {
   const { mode, transition, back } = useVisualMode(props.interview ? SHOW : EMPTY);
@@ -42,6 +45,9 @@ export default function Appointment(props) {
     props.bookInterview(props.id, interview)
     .then(() => {
       transition(SHOW);
+    })
+    .catch((error) => {
+      transition(ERRORSAVE, true);
     });
   }
 
@@ -51,6 +57,9 @@ export default function Appointment(props) {
     props.deleteInterview(props.id)
     .then(() => {
       transition(EMPTY);
+    })
+    .catch((error) => {
+      transition(ERRORDEL, true)
     });
   }
 
@@ -110,6 +119,20 @@ export default function Appointment(props) {
          name={props.interview.student}
          interviewer={props.interview.interviewer.id}
        />
+      )
+      }
+      { mode === ERRORSAVE && (
+        <Error
+          message="Would you like to delete this?"
+          onClose={back}
+        />
+      )
+      }
+        { mode === ERRORDEL && (
+        <Error
+          message="Would you like to delete this?"
+          onClose={back}
+        />
       )
       }
     </article>
