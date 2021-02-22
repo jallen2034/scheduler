@@ -7,7 +7,7 @@ import { getAppointmentsForDay, getInterview, getInterviewersForDay } from "help
 
 export default function Application(props) {
 
-  const {state, setDay, bookInterview, deleteInterview} = useApplicationData();
+  const {state, setDay, bookInterview, deleteInterview, updateSpots} = useApplicationData();
 
   // call getAppointmentsForDay function to tranform the apointments object we stored in state from our API call into something react can render
   const dailyAppointments = getAppointmentsForDay(state, state.day);
@@ -27,9 +27,14 @@ export default function Application(props) {
         interviewers={interviewers}
         bookInterview={bookInterview}
         deleteInterview={deleteInterview}
+        applicationState={state}
+        applicationStateDay={state.day}
+        updateSpots={updateSpots}
       />
     )
   });
+
+  console.log("state.day: ", state.days);
 
   return (
     <main className="layout">

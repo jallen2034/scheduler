@@ -37,6 +37,42 @@ const useApplicationData = function () {
       });
   }, []);
 
+  // helper function to update the spots
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/includes
+  // https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach
+  const updateSpots = function (apointmentId, action) {
+    let apointmentCounter = 0;
+    const foundDay = state.days.find(day => day.appointments.includes(apointmentId));
+
+    // count the amount of apointments booked in previous state
+    foundDay.appointments.forEach(appointment => {
+
+      if (state.appointments[appointment].interview === null) {
+        apointmentCounter += 1;
+      }
+    });
+
+    // decide if the action is book or cancel to +1 or - 1 from this count to later update that in state
+    switch (action) {
+      case 'book':
+        apointmentCounter -= 1;
+        break;
+      case 'cancel':
+        apointmentCounter += 1;
+    }
+
+    // loop through all of the days in state.days, then we spread our found day to make a copy, then update the spots for that found day
+    // with new value
+    const updatedDayArr = state.days.map(day => {
+      if (day.name === foundDay.name) {
+        return {...foundDay, spots: apointmentCounter}
+      }
+      return day;
+    });
+
+    return updatedDayArr;
+  }
+
   // function that will allow us to update the state JUST for the indiivdual day in our object of states
   const setDay = function (newDay) {
     setState({ ...state, day: newDay });
@@ -61,29 +97,30 @@ const useApplicationData = function () {
     return axios.put(appointmentsUpdateUrl, apointmentsCopy[id])
       .then((response) => {
         if (response.status === 204) {
-          setState({ ...state, appointments: apointmentsCopy });
+          const updatedSpotsArr = updateSpots(id, "book");
+          setState({ ...state, appointments: apointmentsCopy, days: updatedSpotsArr });
         }
       });
   }
 
   // function that will be able to delete interviews when called
+  // call updateSpots() to get a updated array with the correct spots counter to set in our applications state
   const deleteInterview = function (id) {
     const appointmentsDelUrl = `/api/appointments/${id}`;
     const apointmentToNullify = { ...state.appointments[id], interview: null };
     const nullifiedApointmentState = { ...state.appointments, [id]: apointmentToNullify };
-    console.log("nullifiedApointmentState: ", nullifiedApointmentState);
-    console.log("apointmentToNullify: ", apointmentToNullify);
 
     return axios.delete(appointmentsDelUrl)
       .then((response) => {
         if (response.status === 204) {
-          setState({ ...state, appointments: nullifiedApointmentState });
+          const updatedSpotsArr = updateSpots(id, "cancel");
+          setState({ ...state, appointments: nullifiedApointmentState, days: updatedSpotsArr});
         }
       })
   }
 
   // return all functions the application.js component needs
-  return { state, setDay, bookInterview, deleteInterview }
+  return { state, setDay, bookInterview, deleteInterview, updateSpots }
 }
 
 export default useApplicationData;
