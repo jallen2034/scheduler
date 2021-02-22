@@ -44,8 +44,6 @@ export function getInterviewersForDay(state, dayName) {
   // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find
   const foundDay = state.days.find(day => day.name === dayName);
 
-  console.log("My foundDay!: ", foundDay)
-
   // returns an empty array when the day is not found :(
   if (!foundDay) {
     return [];

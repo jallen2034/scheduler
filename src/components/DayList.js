@@ -1,5 +1,4 @@
 import React from "react";
-import classNames from 'classnames/bind';
 import DayListItem from "components/DayListItem";
 
 /* https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map

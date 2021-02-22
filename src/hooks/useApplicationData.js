@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from 'axios';
 
 const useApplicationData = function () {
@@ -9,11 +9,11 @@ const useApplicationData = function () {
     interviewers: {}
   });
 
-/* https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all
- * useffect that fires off on this components inital mounting
- * useEffect which only runs when the page loads ONCE to make API call to get our days for react to render to our page
- * performs 2 API calls with Promise.all then sets the state for this component to all[0]'s data for days from days api call
- * and all[1]'s data for appointments from appointments api call */
+  /* https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all
+   * useffect that fires off on this components inital mounting
+   * useEffect which only runs when the page loads ONCE to make API call to get our days for react to render to our page
+   * performs 2 API calls with Promise.all then sets the state for this component to all[0]'s data for days from days api call
+   * and all[1]'s data for appointments from appointments api call */
   useEffect(() => {
     const daysUrl = `/api/days`;
     const appointmentsUrl = `/api/appointments`;
@@ -24,7 +24,6 @@ const useApplicationData = function () {
       axios.get(interviewersUrl)
     ])
       .then((all) => {
-        console.log("Interviewers Object from endpoint: ", all[2].data);
         setState({
           ...state,
           days: all[0].data,

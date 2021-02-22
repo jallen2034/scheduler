@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React from "react";
 import "../Appointment/styles.scss";
 import Header from "./Header";
 import Empty from "./Empty"
@@ -9,8 +9,8 @@ import Status from "./Status";
 import Confirm from "./Confirm";
 import Error from "./Error";
 
-// add the mode constants to the src/components/Appointment/index.js file.
-// terinary in function call asks if props.interview prop is truthy, if so pass in show, otherwise pass empty
+/* add the mode constants to the src/components/Appointment/index.js file.
+ * terinary in function call asks if props.interview prop is truthy, if so pass in show, otherwise pass empty */
 const EMPTY = "EMPTY";
 const SHOW = "SHOW";
 const CREATE = "CREATE";
@@ -21,15 +21,16 @@ const EDIT = "EDIT";
 const ERRORSAVE = "ERRORSAVE";
 const ERRORDEL = "ERRORDEL";
 
+/* save() helper function that will eventually be able to save an apointment
+ * const save = function (name, interviewer, isNew) {
+ * Create a function called save in the Appointment component
+ * Call the props.bookInterview function with the appointment id and interview as arguments from within the save function.
+ * Verify that the correct id and interview values are correct in the console output.
+ * transition into save card when axios call is being made, when async axios call finishes, then transition back to show
+ * cancel() helper function will control the delete behaviour to the Appointment component */
 export default function Appointment(props) {
   const { mode, transition, back } = useVisualMode(props.interview ? SHOW : EMPTY);
 
-  /* helper function that will eventually be able to save an apointment
-   * const save = function (name, interviewer, isNew) {
-   * Create a function called save in the Appointment component
-   * Call the props.bookInterview function with the appointment id and interview as arguments from within the save function.
-   * Verify that the correct id and interview values are correct in the console output.
-   * transition into save card when axios call is being made, when async axios call finishes, then transition back to show */
   function save(name, interviewer) {
     const interview = {
       student: name,
@@ -50,7 +51,6 @@ export default function Appointment(props) {
       });
   }
 
-  // add the rest of the local and remote delete behaviour to the Appointment component
   function cancelInterview() {
     transition(DELETE);
     props.deleteInterview(props.id)

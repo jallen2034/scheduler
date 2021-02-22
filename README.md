@@ -21,17 +21,21 @@ Overview Page with creating an appointment:
 
 !["Login page"](https://github.com/jallen2034/scheduler/blob/master/docs/1.png)
 
+Interviews for Monday being fully booked:
+
+!["Fully booked"](https://github.com/jallen2034/scheduler/blob/master/docs/5.png)
+
 Saving a created interview:
 
-!["Error handling on Desktop"](https://github.com/jallen2034/scheduler/blob/master/docs/2.png)
+![""](https://github.com/jallen2034/scheduler/blob/master/docs/2.png)
 
 Deleting an interview confirmation:
 
-!["Adding a tweet"](https://github.com/jallen2034/scheduler/blob/master/docs/3.png)
+![""](https://github.com/jallen2034/scheduler/blob/master/docs/3.png)
 
 Deleting a created interview:
 
-!["On smaller displays"](https://github.com/jallen2034/scheduler/blob/master/docs/4.png)
+![""](https://github.com/jallen2034/scheduler/blob/master/docs/4.png)
 
 ## Videos
 

@@ -5,8 +5,7 @@ import Button from "components/Button";
 /* 
  * set our usestate hook for our name and interviewer, there are also two helper functions that:
  * helper function that will fire off and call my setName and setInterviewer setters to update their state
- * helper function that will call my props.onCancel() functions to display their triggering then call reset function to update my usestate in this component
- */
+ * helper function that will call my props.onCancel() functions to display their triggering then call reset function to update my usestate in this component */
 export default function Form(props) {
   const [name, setName] = useState(props.name || "");
   const [interviewer, setInterviewer] = useState(props.interviewer || null);
@@ -22,8 +21,6 @@ export default function Form(props) {
     props.onCancel();
     reset();
   }
-
-  console.log("updateCounterForDay in form: ", props.updateCounterForDay);
 
   return (
     <main className="appointment__card appointment__card--create">
