@@ -6,7 +6,6 @@ import DayListItem from "components/DayListItem";
  * loop through props.days array and return a new array with the JSX in each index for react to render later 
  * new array returned into UL looks something like this: [DayListItem1<jsx><jsx>, DayListItem2<jsx><jsx>, DayListItem3<jsx><jsx>] */
 export default function DayList(props) {
-  onmouseleave.log("props in daylist")
   const renderedDays = props.days.map(individualDay => {
     return (
       <DayListItem
