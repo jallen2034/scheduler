@@ -2,10 +2,11 @@ import React from "react";
 import classNames from 'classnames/bind';
 import DayListItem from "components/DayListItem";
 
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map
+/* https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map
+ * loop through props.days array and return a new array with the JSX in each index for react to render later 
+ * new array returned into UL looks something like this: [DayListItem1<jsx><jsx>, DayListItem2<jsx><jsx>, DayListItem3<jsx><jsx>] */
 export default function DayList(props) {
-
-  // old array: [mon, tue, wed, thu, fri, sat, sun]
+  onmouseleave.log("props in daylist")
   const renderedDays = props.days.map(individualDay => {
     return (
       <DayListItem
@@ -17,7 +18,6 @@ export default function DayList(props) {
     );
   });
 
-  // new array returned into UL: [DayListItem1<jsx><jsx>, DayListItem2<jsx><jsx>, DayListItem3<jsx><jsx>]
   return (
     <ul>{ renderedDays }</ul>
   )

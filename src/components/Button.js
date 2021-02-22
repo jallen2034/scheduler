@@ -2,10 +2,9 @@ import React from "react";
 import classNames from 'classnames/bind';
 import "components/Button.scss";
 
-// props {disabled: true, onClick: function(), confirm: false}
+// https://github.com/JedWatson/classnames
 export default function Button(props) {
    
-   // https://github.com/JedWatson/classnames
    const buttonClass = classNames("button", {
       "button--confirm": props.confirm,
       "button--danger": props.danger

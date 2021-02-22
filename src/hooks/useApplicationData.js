@@ -9,7 +9,7 @@ const useApplicationData = function () {
     interviewers: {}
   });
 
-  /* https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all
+/* https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all
  * useffect that fires off on this components inital mounting
  * useEffect which only runs when the page loads ONCE to make API call to get our days for react to render to our page
  * performs 2 API calls with Promise.all then sets the state for this component to all[0]'s data for days from days api call
@@ -37,14 +37,16 @@ const useApplicationData = function () {
       });
   }, []);
 
-  // helper function to update the spots
-  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/includes
-  // https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach
+  /* helper function to update the spots
+   * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/includes
+   * https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach
+   * count the amount of apointments booked in previous state
+   * decide if the action is book or cancel to +1 or - 1 from this count to later update that in state
+   * loop through all of the days in state.days, then we spread our found day to make a copy, then update the spots for that found day with new value */
   const updateSpots = function (apointmentId, action) {
     let apointmentCounter = 0;
     const foundDay = state.days.find(day => day.appointments.includes(apointmentId));
 
-    // count the amount of apointments booked in previous state
     foundDay.appointments.forEach(appointment => {
 
       if (state.appointments[appointment].interview === null) {
@@ -52,7 +54,6 @@ const useApplicationData = function () {
       }
     });
 
-    // decide if the action is book or cancel to +1 or - 1 from this count to later update that in state
     switch (action) {
       case 'book':
         apointmentCounter -= 1;
@@ -61,8 +62,6 @@ const useApplicationData = function () {
         apointmentCounter += 1;
     }
 
-    // loop through all of the days in state.days, then we spread our found day to make a copy, then update the spots for that found day
-    // with new value
     const updatedDayArr = state.days.map(day => {
       if (day.name === foundDay.name) {
         return {...foundDay, spots: apointmentCounter}
@@ -79,20 +78,19 @@ const useApplicationData = function () {
   }
 
   /* Create a function called bookInterview inside the Application component. Copy and paste the template below. 
-  * Then pass bookInterview to each Appointment component as props. */
+   * Then pass bookInterview to each Appointment component as props
+   * populating the correct appointment on the incoming id with the new incoming interview
+   * update the state on the front-end to reflect the new apointment being booked
+   * perform axios POST to back-end call to server to send the new booked appointment to our server with the changes */
   const bookInterview = function (id, interview) {
-
-    // populating the correct appointment on the incoming id with the new incoming interview 
     const newAppointment = {
       ...state.appointments[id],
       interview: { ...interview }
     };
 
-    // update the state on the front-end to reflect the new apointment being booked
     const apointmentsCopy = { ...state.appointments }
     apointmentsCopy[id] = newAppointment;
 
-    // perform axios POST to back-end call to server to send the new booked appointment to our server with the changes
     const appointmentsUpdateUrl = `/api/appointments/${id}`;
     return axios.put(appointmentsUpdateUrl, apointmentsCopy[id])
       .then((response) => {
@@ -103,8 +101,8 @@ const useApplicationData = function () {
       });
   }
 
-  // function that will be able to delete interviews when called
-  // call updateSpots() to get a updated array with the correct spots counter to set in our applications state
+  /* function that will be able to delete interviews when called
+   * call updateSpots() to get a updated array with the correct spots counter to set in our applications state */
   const deleteInterview = function (id) {
     const appointmentsDelUrl = `/api/appointments/${id}`;
     const apointmentToNullify = { ...state.appointments[id], interview: null };

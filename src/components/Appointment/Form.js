@@ -2,9 +2,12 @@ import React, { useState } from "react";
 import InterviewerList from "components/InterviewerList"
 import Button from "components/Button";
 
+/* 
+ * set our usestate hook for our name and interviewer, there are also two helper functions that:
+ * helper function that will fire off and call my setName and setInterviewer setters to update their state
+ * helper function that will call my props.onCancel() functions to display their triggering then call reset function to update my usestate in this component
+ */
 export default function Form(props) {
-
-  // set our usestate hook for our name and interviewer
   const [name, setName] = useState(props.name || "");
   const [interviewer, setInterviewer] = useState(props.interviewer || null);
 
@@ -27,8 +30,7 @@ export default function Form(props) {
       <section className="appointment__card-left">
         <form autoComplete="off" onSubmit={event => event.preventDefault()}>
           <input
-            // This must be a controlled component
-            // value is what we are controlling in our controlled component
+            // This must be a controlled component, value is what we are controlling in our controlled component
             className="appointment__create-input text--semi-bold"
             name="name"
             value={name}
