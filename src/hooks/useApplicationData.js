@@ -52,7 +52,7 @@ const useApplicationData = function () {
    * populating the correct appointment on the incoming id with the new incoming interview
    * update the state on the front-end to reflect the new apointment being booked
    * perform axios POST to back-end call to server to send the new booked appointment to our server with the changes */
-  const bookInterview = function (id, interview, mode) {
+  const bookInterview = function (id, interview) {
     const newAppointment = {
       ...state.appointments[id],
       interview: { ...interview }
@@ -74,7 +74,7 @@ const useApplicationData = function () {
 
   /* function that will be able to delete interviews when called
    * call updateSpots() to get a updated array with the correct spots counter to set in our applications state */
-  const deleteInterview = function (id, mode) {
+  const deleteInterview = function (id) {
     const appointmentsDelUrl = `/api/appointments/${id}`;
     const apointmentToNullify = { ...state.appointments[id], interview: null };
     const nullifiedApointmentState = { ...state.appointments, [id]: apointmentToNullify };
