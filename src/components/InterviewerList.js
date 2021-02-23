@@ -2,6 +2,7 @@ import React from "react";
 import classNames from 'classnames/bind';
 import "components/InterviewerList.scss";
 import InterviewerListItem from "components/InterviewerListItem";
+import PropTypes from 'prop-types';
 
 export default function InterviewerList(props) {
 
@@ -26,3 +27,8 @@ export default function InterviewerList(props) {
   )
 };
 
+/* The prop that we are going to validate is interviewers. 
+ * We will make sure that the interviewers prop is an Array and that it is required */
+InterviewerList.propTypes = {
+  interviewers: PropTypes.array.isRequired
+};

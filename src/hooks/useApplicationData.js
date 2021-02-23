@@ -65,7 +65,6 @@ const useApplicationData = function () {
     return axios.put(appointmentsUpdateUrl, apointmentsCopy[id])
       .then((response) => {
         if (response.status === 204) {
-          // const updatedSpotsArr = updateSpots(id, mode);
           setState({ ...state, appointments: apointmentsCopy });
         }
       }).then(() => {
@@ -83,7 +82,6 @@ const useApplicationData = function () {
     return axios.delete(appointmentsDelUrl)
       .then((response) => {
         if (response.status === 204) {
-          // const updatedSpotsArr = updateSpots(id, mode);
           setState({ ...state, appointments: nullifiedApointmentState });
         }
       }).then(() => {
