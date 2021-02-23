@@ -8,7 +8,7 @@ import { getAppointmentsForDay, getInterview, getInterviewersForDay } from "help
 /*
  * call getAppointmentsForDay function to tranform the apointments object we stored in state from our API call into something react can render */
 export default function Application(props) {
-  const {state, setDay, bookInterview, deleteInterview, updateSpots} = useApplicationData();
+  const {state, setDay, bookInterview, deleteInterview} = useApplicationData();
   const dailyAppointments = getAppointmentsForDay(state, state.day);
 
   /* child component that will loop through the array of apointments and mapa new array of apointments with JSX in each index for each one
@@ -28,7 +28,6 @@ export default function Application(props) {
         deleteInterview={deleteInterview}
         applicationState={state}
         applicationStateDay={state.day}
-        updateSpots={updateSpots}
       />
     )
   });
