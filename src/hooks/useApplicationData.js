@@ -9,13 +9,12 @@ const useApplicationData = function () {
     interviewers: {}
   });
 
-  /* new way of updating spots client side only
-   * update state on database when the counter changes */
+  /* update state on database when the counter changes */
   const updateState = function () {
     const daysUrl = `/api/days`;
     const appointmentsUrl = `/api/appointments`;
     const interviewersUrl = `/api/interviewers`;
-    return Promise.all([
+    Promise.all([
       axios.get(daysUrl),
       axios.get(appointmentsUrl),
       axios.get(interviewersUrl)
@@ -61,20 +60,20 @@ const useApplicationData = function () {
     });
   }
 
-  /* Create a function called bookInterview inside the Application component. Copy and paste the template below. 
-   * Then pass bookInterview to each Appointment component as props
-   * populating the correct appointment on the incoming id with the new incoming interview
-   * update the state on the front-end to reflect the new apointment being booked
-   * perform axios POST to back-end call to server to send the new booked appointment to our server with the changes */
+  /* call bookInterview() function in this custom hook whenever a user wants to create an interview.
+   * create a newAppointment object by spreading the state at appointments[id], then set the interview key in this object to the spread interview object from our incoming param
+   * spread the state.apointments again, then at the id in the apointments key, replace its value with the newAppointment
+   * spread the state, then at the apointments key for all the apointments, replace its value with the updated appointmentsCopy
+     feed that newState into the getUpdatedDays to get how many free slots are left for apointments for that day 
+     update our state after making our put request to set the length of days to the len of the returned newDaysArr and the appointments key to show the user the apointment they updated instantly*/
   const bookInterview = function (id, interview) {
     const newAppointment = {
       ...state.appointments[id],
       interview: { ...interview }
     };
 
-    const apointmentsCopy = { ...state.appointments }
-    apointmentsCopy[id] = newAppointment;
-    const newState = {...state, appointments: apointmentsCopy}
+    const appointmentsCopy = { ...state.appointments, [id]: newAppointment }
+    const newState = {...state, appointments: appointmentsCopy}
     const newDaysArr = getUpdatedDays(newState);
 
     const appointmentsUpdateUrl = `/api/appointments/${id}`;
@@ -83,17 +82,22 @@ const useApplicationData = function () {
         setState((current) => ({
           ...current,
           days: newDaysArr,
-          appointments: apointmentsCopy
+          appointments: appointmentsCopy
         }));
       });
   }
 
-  /* function that will be able to delete interviews when called
-   * call updateSpots() to get a updated array with the correct spots counter to set in our applications state */
+  /* https://www.freecodecamp.org/news/copying-stuff-in-javascript-how-to-differentiate-between-deep-and-shallow-copies-b6d8c1ef09cd/
+   * call deleteInterview() function in this custom hook whenever a user wants to delete an interview
+   * spread the original state stored in this hook and store it in apointmentsCopy
+   * spread the apointmentsCopy object specisifcally at the incoming user id, and set the interview value to none, store this 2nd copy into updatedAppointment
+   * spread the state again, then at the appointment key of that copy, spread the entire apointmentsCopy object and at the key of that copied object at the id, add the updatedAppointment as a value 
+   * with that new optimistic state, feed it into the getUpdatedDays() function to calculate the len of the newDaysarr it returns to then set our new state with before
+   * making our put request */
   const deleteInterview = function (id) {
-    const apointmentsCopy = { ...state.appointments }
-    apointmentsCopy[id].interview = null;
-    const newState = {...state, appointments: apointmentsCopy}
+    const apointmentsCopy = { ...state.appointments };
+    const updatedAppointment = {...apointmentsCopy[id], interview: null };
+    const newState = {...state, appointments: {...apointmentsCopy, [id]: updatedAppointment}};
     const newDaysArr = getUpdatedDays(newState);
 
     const appointmentsDelUrl = `/api/appointments/${id}`;
