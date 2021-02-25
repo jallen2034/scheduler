@@ -34,9 +34,7 @@ const useApplicationData = function () {
 
   /* https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all
    * useffect that fires off on this components inital mounting
-   * useEffect which only runs when the page loads ONCE to make API call to get our days for react to render to our page
-   * performs 2 API calls with Promise.all then sets the state for this component to all[0]'s data for days from days api call
-   * and all[1]'s data for appointments from appointments api call */
+   * useEffect which only runs when the page loads ONCE to make API call to get our days for react to render to our page */
   useEffect(() => {
     updateState();
   }, []);
@@ -60,12 +58,12 @@ const useApplicationData = function () {
     });
   }
 
-  /* call bookInterview() function in this custom hook whenever a user wants to create an interview.
-   * create a newAppointment object by spreading the state at appointments[id], then set the interview key in this object to the spread interview object from our incoming param
-   * spread the state.apointments again, then at the id in the apointments key, replace its value with the newAppointment
+  /* call bookInterview() function whenever a user wants to create an interview.
+   * create a newAppointment object by spreading the state at appointments[id], set the interview key in this object to the spread interview object from incoming param
+   * spread the state.apointments, then at the id in the apointments key, replace its value with the newAppointment
    * spread the state, then at the apointments key for all the apointments, replace its value with the updated appointmentsCopy
-     feed that newState into the getUpdatedDays to get how many free slots are left for apointments for that day 
-     update our state after making our put request to set the length of days to the len of the returned newDaysArr and the appointments key to show the user the apointment they updated instantly*/
+   * feed that newState into the getUpdatedDays to get how many free slots are left for apointments for that day
+   * update our state after making our put request to set the length of days to the len of the returned newDaysArr + appointments key to show the user the apointment they changed */
   const bookInterview = function (id, interview) {
     const newAppointment = {
       ...state.appointments[id],
