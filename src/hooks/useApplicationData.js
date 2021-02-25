@@ -47,6 +47,20 @@ const useApplicationData = function () {
     setState({ ...state, day: newDay });
   }
 
+  /* takes in our new "updated state" as an incoming paramater
+   * in our specific case, it takes in an object that is a simulation of the updated state that we will set in the furutre after our PUT request
+   * loop through newState.days data structure, for each day do a .filter on the day.appointments[] array. if the interview === null on each day
+   * being looped through, then add that index to a new array, then calculate the length of that new array and assign that as the new spots value 
+   * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter */
+  const getUpdatedDays = function (newState) {
+    return newState.days.map((day) => {
+      return {
+        ...day, 
+        spots: day.appointments.filter((id) => newState.appointments[id].interview === null).length
+      }
+    });
+  }
+
   /* Create a function called bookInterview inside the Application component. Copy and paste the template below. 
    * Then pass bookInterview to each Appointment component as props
    * populating the correct appointment on the incoming id with the new incoming interview
@@ -60,32 +74,36 @@ const useApplicationData = function () {
 
     const apointmentsCopy = { ...state.appointments }
     apointmentsCopy[id] = newAppointment;
+    const newState = {...state, appointments: apointmentsCopy}
+    const newDaysArr = getUpdatedDays(newState);
 
     const appointmentsUpdateUrl = `/api/appointments/${id}`;
-    return axios.put(appointmentsUpdateUrl, apointmentsCopy[id])
-      .then((response) => {
-        if (response.status === 204) {
-          setState({ ...state, appointments: apointmentsCopy });
-        }
-      }).then(() => {
-        return updateState();
+    return axios.put(appointmentsUpdateUrl, {interview})
+      .then(() => {
+        setState((current) => ({
+          ...current,
+          days: newDaysArr,
+          appointments: apointmentsCopy
+        }));
       });
   }
 
   /* function that will be able to delete interviews when called
    * call updateSpots() to get a updated array with the correct spots counter to set in our applications state */
   const deleteInterview = function (id) {
-    const appointmentsDelUrl = `/api/appointments/${id}`;
-    const apointmentToNullify = { ...state.appointments[id], interview: null };
-    const nullifiedApointmentState = { ...state.appointments, [id]: apointmentToNullify };
+    const apointmentsCopy = { ...state.appointments }
+    apointmentsCopy[id].interview = null;
+    const newState = {...state, appointments: apointmentsCopy}
+    const newDaysArr = getUpdatedDays(newState);
 
+    const appointmentsDelUrl = `/api/appointments/${id}`;
     return axios.delete(appointmentsDelUrl)
-      .then((response) => {
-        if (response.status === 204) {
-          setState({ ...state, appointments: nullifiedApointmentState });
-        }
-      }).then(() => {
-        return updateState();
+      .then(() => {
+        setState((current) => ({
+          ...current,
+          days: newDaysArr,
+          appointments: apointmentsCopy
+        }));
       });
   }
 

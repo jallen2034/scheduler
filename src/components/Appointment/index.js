@@ -62,13 +62,15 @@ export default function Appointment(props) {
       });
   }
 
+  // console.log("props.interview.student: ", props.interview.student);
+
   return (
-    <article className="appointment">
+    <article className="appointment" data-testid="appointment">
       <Header time={props.time} />
       { mode === SHOW && (
         <Show
-          students={props.interview.student}
-          interviewer={props.interview.interviewer}
+          students={props.interview ? props.interview.student: null}
+          interviewer={props.interview ? props.interview.interviewer: null}
           onEdit={() => transition(EDIT)}
           onDelete={() => transition(CONFIRM)}
         />
@@ -86,6 +88,7 @@ export default function Appointment(props) {
           interviewers={props.interviewers}
           onSave={save}
           onCancel={back}
+          mode="book"
         />
       )
       }
@@ -106,6 +109,7 @@ export default function Appointment(props) {
           message="Would you like to delete this?"
           onCancel={back}
           onConfirm={cancelInterview}
+          mode="cancel"
         />
       )
       }
@@ -115,8 +119,9 @@ export default function Appointment(props) {
           interviewers={props.interviewers}
           onSave={save}
           onCancel={back}
-          name={props.interview.student}
+          name={props.interview ? props.interview.student: null}
           interviewer={props.interview.interviewer.id}
+          mode="edit"
         />
       )
       }
