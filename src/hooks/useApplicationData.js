@@ -39,15 +39,14 @@ const useApplicationData = function () {
     updateState();
   }, []);
 
-  // function that will allow us to update the state JUST for the indiivdual day in our object of states
+  // allows us to update the state JUST for the indiivdual day in our object of states
   const setDay = function (newDay) {
     setState({ ...state, day: newDay });
   }
 
-  /* takes in our new "updated state" as an incoming paramater
-   * in our specific case, it takes in an object that is a simulation of the updated state that we will set in the furutre after our PUT request
-   * loop through newState.days data structure, for each day do a .filter on the day.appointments[] array. if the interview === null on each day
-   * being looped through, then add that index to a new array, then calculate the length of that new array and assign that as the new spots value 
+  /* takes in our newState as an incoming paramater, that we will set in the furutre after our PUT request
+   * loop through newState.days data structure, for each day, do a .filter on the day.appointments[] array. if the interview === null on each day
+   * being looped through, add that index to a new array, then calculate the length of that new array + pass that back as the new spots value 
    * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter */
   const getUpdatedDays = function (newState) {
     return newState.days.map((day) => {
@@ -58,12 +57,12 @@ const useApplicationData = function () {
     });
   }
 
-  /* call bookInterview() function whenever a user wants to create an interview.
-   * create a newAppointment object by spreading the state at appointments[id], set the interview key in this object to the spread interview object from incoming param
-   * spread the state.apointments, then at the id in the apointments key, replace its value with the newAppointment
+  /* call bookInterview() function whenever a user wants to create an interview. no shallow copies! 
+   * create a newAppointment object by spreading the state at appointments[id], set the interview key in this object to the spread incoming interview object
+   * spread the state.apointments, at the id in the apointments key, replace its value with the newAppointment
    * spread the state, then at the apointments key for all the apointments, replace its value with the updated appointmentsCopy
    * feed that newState into the getUpdatedDays to get how many free slots are left for apointments for that day
-   * update our state after making our put request to set the length of days to the len of the returned newDaysArr + appointments key to show the user the apointment they changed */
+   * update our state after making our put request, setting the length of days to the len of the returned newDaysArr + appointments key */
   const bookInterview = function (id, interview) {
     const newAppointment = {
       ...state.appointments[id],
@@ -86,12 +85,11 @@ const useApplicationData = function () {
   }
 
   /* https://www.freecodecamp.org/news/copying-stuff-in-javascript-how-to-differentiate-between-deep-and-shallow-copies-b6d8c1ef09cd/
-   * call deleteInterview() function in this custom hook whenever a user wants to delete an interview
+   * call deleteInterview() function in this custom hook whenever a user wants to delete an interview - no shallow copies! 
    * spread the original state stored in this hook and store it in apointmentsCopy
-   * spread the apointmentsCopy object specisifcally at the incoming user id, and set the interview value to none, store this 2nd copy into updatedAppointment
-   * spread the state again, then at the appointment key of that copy, spread the entire apointmentsCopy object and at the key of that copied object at the id, add the updatedAppointment as a value 
-   * with that new optimistic state, feed it into the getUpdatedDays() function to calculate the len of the newDaysarr it returns to then set our new state with before
-   * making our put request */
+   * spread the apointmentsCopy object at the incoming user id, set the interview value to none, store this 2nd copy into updatedAppointment
+   * spread the state again, at the appointment key of that copy, spread the entire apointmentsCopy object, at if of the key of that copied object add the updatedAppointment as a value 
+   * feed this new optimistic state into the getUpdatedDays() function calculating the len of the newDaysarr it returns to then set our new state */
   const deleteInterview = function (id) {
     const apointmentsCopy = { ...state.appointments };
     const updatedAppointment = {...apointmentsCopy[id], interview: null };
