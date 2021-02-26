@@ -6,6 +6,24 @@ Interview Scheduler is a React application that allows users to book and cancel 
 
 Install dependencies with `npm install`.
 
+## Running Webpack Development Server
+
+```
+npm start
+```
+
+## Running Jest Test Framework
+
+```
+npm test
+```
+
+## Running Storybook Visual Testbed
+
+```
+npm run storybook
+```
+
 ## Dependencies
 
 - Node 10.x or above
