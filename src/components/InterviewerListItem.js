@@ -1,15 +1,14 @@
-import React from "react";
+import React from 'react';
 import classNames from 'classnames/bind';
-import "components/InterviewerListItem.scss";
+import 'components/InterviewerListItem.scss';
 
 // https://github.com/JedWatson/classnames
 export default function InterviewerListItem(props) {
-
-  const interviewers__item = classNames("interviewers__item", {
-    "interviewers__item--selected": props.selected,
+  const interviewers__item = classNames('interviewers__item', {
+    'interviewers__item--selected': props.selected,
   });
 
-  return (                   
+  return (
     <li className={interviewers__item} onClick={props.setInterviewer}>
       <img
         className="interviewers__item-image"
@@ -18,5 +17,5 @@ export default function InterviewerListItem(props) {
       />
       {props.selected && props.name}
     </li>
-  )
+  );
 }
