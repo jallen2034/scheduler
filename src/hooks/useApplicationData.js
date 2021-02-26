@@ -9,7 +9,8 @@ const useApplicationData = function () {
     interviewers: {}
   });
 
-  /* update state on database when the counter changes */
+  /* helper function which can update our custom hooks state
+   * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all */
   const updateState = function () {
     const daysUrl = `/api/days`;
     const appointmentsUrl = `/api/appointments`;
@@ -27,13 +28,9 @@ const useApplicationData = function () {
           interviewers: all[2].data
         });
       })
-      .catch(err => {
-        console.log(err)
-      });
-  }
+  };
 
-  /* https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all
-   * useffect that fires off on this components inital mounting
+  /* useffect that fires off on this components inital mounting
    * useEffect which only runs when the page loads ONCE to make API call to get our days for react to render to our page */
   useEffect(() => {
     updateState();
@@ -42,11 +39,11 @@ const useApplicationData = function () {
   // allows us to update the state JUST for the indiivdual day in our object of states
   const setDay = function (newDay) {
     setState({ ...state, day: newDay });
-  }
+  };
 
-  /* takes in our newState as an incoming paramater, that we will set in the furutre after our PUT request
-   * loop through newState.days data structure, for each day, do a .filter on the day.appointments[] array. if the interview === null on each day
-   * being looped through, add that index to a new array, then calculate the length of that new array + pass that back as the new spots value 
+  /* takes in newState as an incoming param, that we will set in the furutre after our PUT request
+   * loop through newState.days data structure, for each day, do a filter on the day.appointments[] array. if the interview === null on each day
+     being looped through, add that index to a new array, calculate the length of that new array + pass that back as the new spots value 
    * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter */
   const getUpdatedDays = function (newState) {
     return newState.days.map((day) => {
@@ -55,14 +52,15 @@ const useApplicationData = function () {
         spots: day.appointments.filter((id) => newState.appointments[id].interview === null).length
       }
     });
-  }
+  };
 
-  /* call bookInterview() function whenever a user wants to create an interview. no shallow copies! 
-   * create a newAppointment object by spreading the state at appointments[id], set the interview key in this object to the spread incoming interview object
-   * spread the state.apointments, at the id in the apointments key, replace its value with the newAppointment
-   * spread the state, then at the apointments key for all the apointments, replace its value with the updated appointmentsCopy
-   * feed that newState into the getUpdatedDays to get how many free slots are left for apointments for that day
-   * update our state after making our put request, setting the length of days to the len of the returned newDaysArr + appointments key */
+  /* https://www.freecodecamp.org/news/copying-stuff-in-javascript-how-to-differentiate-between-deep-and-shallow-copies-b6d8c1ef09cd/
+   * call bookInterview() whenever a user creates an interview. no shallow copies! 
+   * create a newAppointment object by spreading the state at appointments[id]
+   * spread the state.apointments, at the "id" in the apointments key, replace thid value "newAppointment"
+   * spread the state, then at the apointments key for all the apointments, replace its value with "appointmentsCopy"
+   * feed that newState into the getUpdatedDays, to get how many free slots are left for that day
+   * update our state optimistically after making our put request, set length of days to len of the returned newDaysArr + appointments key */
   const bookInterview = function (id, interview) {
     const newAppointment = {
       ...state.appointments[id],
@@ -82,13 +80,12 @@ const useApplicationData = function () {
           appointments: appointmentsCopy
         }));
       });
-  }
+  };
 
-  /* https://www.freecodecamp.org/news/copying-stuff-in-javascript-how-to-differentiate-between-deep-and-shallow-copies-b6d8c1ef09cd/
-   * call deleteInterview() function in this custom hook whenever a user wants to delete an interview - no shallow copies! 
+  /* call deleteInterview() whenever a user deletes an interview - no shallow copies! 
    * spread the original state stored in this hook and store it in apointmentsCopy
-   * spread the apointmentsCopy object at the incoming user id, set the interview value to none, store this 2nd copy into updatedAppointment
-   * spread the state again, at the appointment key of that copy, spread the entire apointmentsCopy object, at if of the key of that copied object add the updatedAppointment as a value 
+   * spread the apointmentsCopy object at the incoming user id, set the interview val to none, store this 2nd copy in "updatedAppointment"
+   * spread the state again, at the appointment key of that copy, spread the entire apointmentsCopy object, at "id" of that copied object add updatedAppointment as the val
    * feed this new optimistic state into the getUpdatedDays() function calculating the len of the newDaysarr it returns to then set our new state */
   const deleteInterview = function (id) {
     const apointmentsCopy = { ...state.appointments };
@@ -109,6 +106,6 @@ const useApplicationData = function () {
 
   // return all functions the application.js component needs
   return { state, setDay, bookInterview, deleteInterview }
-}
+};
 
 export default useApplicationData;

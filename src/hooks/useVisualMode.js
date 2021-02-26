@@ -1,14 +1,12 @@
 import { useState } from "react";
 
-/* declare our inital default useState for this custom component we are building
- * set the mode state with the initial mode provided
+/* custom hook which manages the current "card" is displayed to a user
+ * declare our inital default useState for this custom component we are building, set the mode state with the initial mode provided
  * return the object containing our mode property */
 const useVisualMode = function (inital) {
   const [mode, setMode] = useState([inital]);
 
-  /* transition function would be declared in here
-   * check if replace as an incoming parmater is true
-   * implement back limit
+  /* transition function would be declared in here, check if replace as an incoming parmater is true then implement the back limit
    * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/pop
    * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Default_parameters */
   const transition = function (newMode, replace = false) {
@@ -21,7 +19,7 @@ const useVisualMode = function (inital) {
     } else {
       setMode([...mode, newMode]);
     }
-  }
+  };
 
   const back = function () {
     const poppedArr = [...mode];
@@ -33,11 +31,11 @@ const useVisualMode = function (inital) {
 
     setMode(poppedArr);
     return;
-  }
+  };
 
   // mode.slice(-1)[0] gets last index of mode array and it is later returned out of this function
   const currentMode = mode.slice(-1)[0];
   return { mode: currentMode, transition, back };
-}
+};
 
 export default useVisualMode;

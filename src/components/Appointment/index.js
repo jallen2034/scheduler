@@ -21,13 +21,10 @@ const EDIT = "EDIT";
 const ERRORSAVE = "ERRORSAVE";
 const ERRORDEL = "ERRORDEL";
 
-/* save() helper function that will eventually be able to save an apointment
- * const save = function (name, interviewer, isNew) {
- * Create a function called save in the Appointment component
- * Call the props.bookInterview function with the appointment id and interview as arguments from within the save function.
- * Verify that the correct id and interview values are correct in the console output.
- * transition into save card when axios call is being made, when async axios call finishes, then transition back to show
- * cancel() helper function will control the delete behaviour to the Appointment component */
+/* child component for appointments
+ * has a save() helper function that will is able to save an apointment
+ * has a cancelInterview() helper function that is able to delete an apointment 
+ * has contiiodnal rendering for all grandchild components based on what mode is currently set by the user*/
 export default function Appointment(props) {
   const { mode, transition, back } = useVisualMode(props.interview ? SHOW : EMPTY);
 
@@ -61,8 +58,6 @@ export default function Appointment(props) {
         transition(ERRORDEL, true)
       });
   }
-
-  // console.log("props.interview.student: ", props.interview.student);
 
   return (
     <article className="appointment" data-testid="appointment">
