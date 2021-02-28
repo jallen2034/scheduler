@@ -52,18 +52,14 @@ const useApplicationData = function () {
   };
 
   /* https://www.freecodecamp.org/news/copying-stuff-in-javascript-how-to-differentiate-between-deep-and-shallow-copies-b6d8c1ef09cd/
-   * call bookInterview() whenever a user creates an interview. no shallow copies!
-   * create a newAppointment object by spreading the state at appointments[id]
-   * spread the state.apointments, at the "id" in the apointments key, replace thid value "newAppointment"
-   * spread the state, then at the apointments key for all the apointments, replace its value with "appointmentsCopy"
-   * feed that newState into the getUpdatedDays, to get how many free slots are left for that day
-   * update our state optimistically after making our put request, set length of days to len of the returned newDaysArr + appointments key */
+   * call bookInterview() whenever a user creates an interview - no shallow copies!
+   * we pretty much make a deep copy of our previous state, update a copy of it with the new optimistic state anticipated before making our axios request
+   * we also calculate how many empty spots there will be after we change our state and do pur put request optimistically */
   const bookInterview = function (id, interview) {
     const newAppointment = {
       ...state.appointments[id],
       interview: { ...interview },
     };
-
     const appointmentsCopy = { ...state.appointments, [id]: newAppointment };
     const newState = { ...state, appointments: appointmentsCopy };
     const newDaysArr = getUpdatedDays(newState);
@@ -79,16 +75,13 @@ const useApplicationData = function () {
   };
 
   /* call deleteInterview() whenever a user deletes an interview - no shallow copies!
-   * spread the original state stored in this hook and store it in apointmentsCopy
-   * spread the apointmentsCopy object at the incoming user id, set the interview val to none, store this 2nd copy in "updatedAppointment"
-   * spread the state again, at the appointment key of that copy, spread the entire apointmentsCopy object, at "id" of that copied object add updatedAppointment as the val
-   * feed this new optimistic state into the getUpdatedDays() function calculating the len of the newDaysarr it returns to then set our new state */
+   * pretty much works the same as above, but we change the newApointments interview key to have a null val instead of a valid interview object before 
+   * we make our delete request and update our state */
   const deleteInterview = function (id) {
     const newAppointment = {
       ...state.appointments[id],
       interview: null,
     };
-
     const appointmentsCopy = { ...state.appointments, [id]: newAppointment };
     const newState = { ...state, appointments: appointmentsCopy };
     const newDaysArr = getUpdatedDays(newState);
