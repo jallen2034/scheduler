@@ -9,9 +9,11 @@ const useApplicationData = function () {
     interviewers: {},
   });
 
-  /* helper function which can update our custom hooks state
-   * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all */
-  const updateState = function () {
+
+
+  /* useffect that fires off on this components inital mounting
+   * useEffect which only runs when the page loads ONCE to make API call to get our days for react to render to our page */
+  useEffect(() => {
     const daysUrl = '/api/days';
     const appointmentsUrl = '/api/appointments';
     const interviewersUrl = '/api/interviewers';
@@ -20,19 +22,13 @@ const useApplicationData = function () {
       axios.get(appointmentsUrl),
       axios.get(interviewersUrl),
     ]).then((all) => {
-      setState({
-        ...state,
+      setState(prev => ({
+        ...prev,
         days: all[0].data,
         appointments: all[1].data,
         interviewers: all[2].data,
-      });
+      }));
     });
-  };
-
-  /* useffect that fires off on this components inital mounting
-   * useEffect which only runs when the page loads ONCE to make API call to get our days for react to render to our page */
-  useEffect(() => {
-    updateState();
   }, []);
 
   // allows us to update the state JUST for the indiivdual day in our object of states
@@ -88,12 +84,13 @@ const useApplicationData = function () {
    * spread the state again, at the appointment key of that copy, spread the entire apointmentsCopy object, at "id" of that copied object add updatedAppointment as the val
    * feed this new optimistic state into the getUpdatedDays() function calculating the len of the newDaysarr it returns to then set our new state */
   const deleteInterview = function (id) {
-    const apointmentsCopy = { ...state.appointments };
-    const updatedAppointment = { ...apointmentsCopy[id], interview: null };
-    const newState = {
-      ...state,
-      appointments: { ...apointmentsCopy, [id]: updatedAppointment },
+    const newAppointment = {
+      ...state.appointments[id],
+      interview: null,
     };
+
+    const appointmentsCopy = { ...state.appointments, [id]: newAppointment };
+    const newState = { ...state, appointments: appointmentsCopy };
     const newDaysArr = getUpdatedDays(newState);
 
     const appointmentsDelUrl = `/api/appointments/${id}`;
@@ -101,12 +98,11 @@ const useApplicationData = function () {
       setState((current) => ({
         ...current,
         days: newDaysArr,
-        appointments: apointmentsCopy,
+        appointments: appointmentsCopy,
       }));
     });
   };
 
-  // return all functions the application.js component needs
   return { state, setDay, bookInterview, deleteInterview };
 };
 
