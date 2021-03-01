@@ -3,7 +3,7 @@
 export function getAppointmentsForDay(state, dayName) {
   /* sad path catch for when the state recieved, its days array doesn't have anything in it :(
    * returns an empty array when the days data is empty */
-  if (state.days.length === 0 || state.days === undefined) {
+  if (!state.days.length || !state.days) {
     return [];
   }
 
@@ -35,7 +35,7 @@ export function getInterview(state, interview) {
 }
 
 export function getInterviewersForDay(state, dayName) {
-  if (state.days.length === 0 || state.days === undefined) {
+  if (!state.days.length || !state.days) {
     return [];
   }
 
