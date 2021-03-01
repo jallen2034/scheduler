@@ -9,8 +9,6 @@ const useApplicationData = function () {
     interviewers: {},
   });
 
-
-
   /* useffect that fires off on this components inital mounting
    * useEffect which only runs when the page loads ONCE to make API call to get our days for react to render to our page */
   useEffect(() => {
