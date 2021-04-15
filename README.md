@@ -33,6 +33,11 @@ npm run storybook
 - Axios 0.21.1 or above
 - Normalize.css 8.0.1 or above
 
+## Video Demo
+
+https://www.youtube.com/watch?v=zPQfJfQ-7J8
+
+
 ## Screenshots
 
 Overview Page with creating an appointment:
@@ -54,7 +59,3 @@ Deleting an interview confirmation:
 Deleting a created interview:
 
 ![""](https://github.com/jallen2034/scheduler/blob/master/docs/4.png)
-
-## Videos
-
-https://streamable.com/ds3v1o
